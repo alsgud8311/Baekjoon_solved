@@ -3,38 +3,31 @@ const inputs = require("fs")
   .toString()
   .trim()
   .split("\n");
-
-const target = +inputs[0];
+const n = +inputs[0];
 const m = +inputs[1];
+
 let broken = [];
-if (m > 0) broken = inputs[2].split(" ").map(Number);
+if (m > 0) broken = inputs[2].split(" ");
 
-function findClosestChannel(target) {
-  let closestChannel = Infinity;
-  let minDistance = Infinity;
+const MAX = 1000000;
 
-  for (let candidate = 0; candidate <= 1000000; candidate++) {
-    const candidateStr = candidate.toString();
+function search(num) {
+  let minDist = Infinity;
+  let minLoc = Infinity;
+  for (let target = 0; target <= MAX; target++) {
+    const stringified = Array.from(target.toString());
 
-    if ([...candidateStr].some((char) => broken.includes(+char))) continue;
+    if (stringified.some((char) => broken.includes(char))) continue;
 
-    const distance = Math.abs(candidate - target);
-
-    if (distance < minDistance) {
-      minDistance = distance;
-      closestChannel = candidate;
+    const dist = Math.abs(num - target);
+    if (dist < minDist) {
+      minDist = dist;
+      minLoc = target;
     }
   }
-
-  return { channel: closestChannel, distance: minDistance };
+  return { minDist, minLoc };
 }
 
-const moveByButtons = findClosestChannel(target);
-const moveByPlusMinus = Math.abs(target - 100);
+const { minDist, minLoc } = search(n);
 
-const result = Math.min(
-  moveByButtons.distance + moveByButtons.channel.toString().length,
-  moveByPlusMinus
-);
-
-console.log(result);
+console.log(Math.min(minLoc.toString().length + minDist, Math.abs(n - 100)));
