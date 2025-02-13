@@ -5,16 +5,14 @@ const [N, ...rest] = require("fs")
   .trim()
   .split("\n");
 const n = +N;
-const arr = rest.map((r) => r.split(" ").map(Number));
 const dpArr = rest.map((r) => r.split(" ").map(Number));
 
-//depth
 for (let i = 1; i < n; i++) {
-  for (let j = 0; j < arr[i].length; j++) {
+  for (let j = 0; j < dpArr[i].length; j++) {
     if (j === 0) {
       dpArr[i][j] += dpArr[i - 1][j];
       continue;
-    } else if (j === arr[i].length - 1) {
+    } else if (j === dpArr[i].length - 1) {
       dpArr[i][j] += dpArr[i - 1][j - 1];
       continue;
     } else {
