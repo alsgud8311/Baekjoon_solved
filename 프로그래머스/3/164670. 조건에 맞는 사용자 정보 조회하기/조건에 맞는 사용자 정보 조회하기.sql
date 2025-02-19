@@ -1,0 +1,4 @@
+SELECT b.USER_ID, b.NICKNAME, CONCAT(b.CITY," ", b.STREET_ADDRESS1," " , b.STREET_ADDRESS2) '전체주소', CONCAT(SUBSTR(b.TLNO,1,3),"-",SUBSTR(b.TLNO,4,4),"-",SUBSTR(b.TLNO,8)) "전화번호"
+from USED_GOODS_BOARD a join USED_GOODS_USER b on a.WRITER_ID=b.USER_ID
+group by b.USER_ID having COUNT(*) >= 3
+order by USER_ID desc
