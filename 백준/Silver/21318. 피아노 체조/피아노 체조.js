@@ -10,12 +10,18 @@ const sheet = [0, ...inputs[1].split(" ").map(Number)];
 const questions = inputs.slice(3).map((q) => q.split(" ").map(Number));
 const dp = new Array(n + 1).fill(0);
 
-for (let i = 1; i < n; i++) {
-  dp[i] = dp[i - 1] + (sheet[i] > sheet[i + 1] ? 1 : 0);
+let acc = 1;
+for (let i = n - 1; i > 0; i--) {
+  if (sheet[i] > sheet[i + 1]) {
+    dp[i] += acc;
+    acc++;
+  } else {
+    dp[i] = acc - 1;
+  }
 }
 
 let result = "";
 for (const [x, y] of questions) {
-  result += `${dp[y - 1] - dp[x - 1]}\n`;
+  result += `${dp[x] - dp[y]}\n`;
 }
 console.log(result);
