@@ -4,7 +4,7 @@ const [n, ...w] = require("fs")
   .toString()
   .trim()
   .split("\n");
-const dp = new Array(500).fill(1);
+const dp = new Array(100).fill(1);
 const wires = w.map((w) => w.split(" ").map(Number));
 wires.sort((a, b) => a[0] - b[0]);
 
