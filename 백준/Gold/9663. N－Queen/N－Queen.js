@@ -1,40 +1,34 @@
-let n = parseInt(require("fs").readFileSync("/dev/stdin").toString());
-console.log(getQueens(n));
+const INPUT_FILE = process.platform === "linux" ? "/dev/stdin" : "./inputs.txt";
+const n = +require("fs").readFileSync(INPUT_FILE).toString().trim();
+const chessBoard = Array.from({ length: n }, () => Array(n).fill(0));
 
-function getQueens(n) {
-  let count = 0;
-  const chessBoard = Array.from({ length: n }, () => new Array(n).fill(0));
-  backtrack(0);
-  return count;
+let cnt = 0;
 
-  function backtrack(row) {
-    if (row === n) {
-      count++;
-      return;
-    }
-
-    for (let col = 0; col < n; col++) {
-      if (isSafe(chessBoard, row, col)) {
-        chessBoard[row][col] = 1;
-        backtrack(row + 1);
-        chessBoard[row][col] = 0;
-      }
-    }
+function backTracking(row) {
+  if (row === n) {
+    cnt++;
+    return;
   }
-
-  function isSafe(board, row, col) {
-    for (let i = 0; i < row; i++) {
-      if (board[i][col] === 1) return false;
+  for (let col = 0; col < n; col++) {
+    if (chessBoard[row][col] === 0) {
+      queenMoves(row, col, 1);
+      backTracking(row + 1);
+      queenMoves(row, col, -1);
     }
-
-    for (let i = 1; row - i >= 0 && col - i >= 0; i++) {
-      if (board[row - i][col - i] === 1) return false;
-    }
-
-    for (let i = 1; row - i >= 0 && col + i < n; i++) {
-      if (board[row - i][col + i] === 1) return false;
-    }
-
-    return true;
   }
 }
+
+function queenMoves(r, c, delta) {
+  for (let i = 0; i < n; i++) {
+    chessBoard[r][i] += delta;
+    chessBoard[i][c] += delta;
+    if (r + i < n && c + i < n) chessBoard[r + i][c + i] += delta;
+    if (r + i < n && c - i >= 0) chessBoard[r + i][c - i] += delta;
+    if (r - i >= 0 && c + i < n) chessBoard[r - i][c + i] += delta;
+    if (r - i >= 0 && c - i >= 0) chessBoard[r - i][c - i] += delta;
+  }
+  chessBoard[r][c] -= delta * 5;
+}
+
+backTracking(0);
+console.log(cnt);
